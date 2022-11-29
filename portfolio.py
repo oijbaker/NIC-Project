@@ -6,7 +6,12 @@ class Portfolio:
         self.stocks = [[i, 0] for i in range(10)]
         self.df = df
         self.day = 0
-       
+        self.logbook = []
+        self.do_log = True
+        
+    
+    def log(self, string):
+        self.logbook.append(string)   
         
     def buy(self, stock_index, number):
         """ Buy a stock
@@ -21,10 +26,13 @@ class Portfolio:
         volume = self.df[volume_field][self.day]
         close = self.df[close_field][self.day]
         
-        if number < 0.4*volume and number*close < self.cash*0.99:
+        if number < 0.4*volume and number*close < self.cash*0.999:
             self.stocks[stock_index-1][1] += number
             
-        self.cash -= number*close*0.99
+        self.cash -= number*close*0.999
+        if self.do_log:
+            total_value = self.evaluate()+self.cash
+            self.log("Bought "+str(number)+" of "+str(stock_index)+" at "+str(close)+". New value="+str(total_value))
      
             
     def sell(self, stock_index, number):
@@ -34,10 +42,13 @@ class Portfolio:
         volume = self.df[volume_field][self.day]
         close = self.df[close_field][self.day]
         
-        if number <= self.stocks[stock_index-1][1]*0.99 and number < 0.4*volume:
+        if number <= self.stocks[stock_index-1][1]*0.999 and number < 0.4*volume:
             self.stocks[stock_index-1][1] -= number
             
-        self.cash += number*close*0.99
+        self.cash += number*close*0.999
+        if self.do_log:
+            total_value = self.evaluate()+self.cash
+            self.log("Sold "+str(number)+" of "+str(stock_index)+" at "+str(close)+". New value="+str(total_value))
         
         
     def evaluate(self):
