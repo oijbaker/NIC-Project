@@ -11,7 +11,7 @@ import portfolio
 
 
 
-""" whole file is deprecated is it is a pile of shit """
+""" whole file is irrelevant because this code is rubbish and doesn't work :) """
 
 
 
