@@ -36,3 +36,7 @@ class Node:
         if len(self.children) <= self.number_of_subnodes:
             self.children.append(child)
        
+       
+    def detach(self):
+        self.parent.children.remove(self)
+        self.parent = None
