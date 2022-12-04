@@ -9,12 +9,12 @@ import rules
 structure of a rule 
 
 		or 
-	>      	  <
+	>      	  	<
 
-avg	 50	   	max   30 
+   avg	    50	     max   30 
 
 The above rule state if moving average over 50 days is greater than closing price buy or sell otherwise
-or if max price over 30 days is greater than closing price buy or sell otherwise. 
+or if max price over 30 days is less than closing price buy or sell otherwise. 
 
 """
 def generate_random_rule():
