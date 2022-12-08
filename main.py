@@ -5,8 +5,8 @@ from random import choice, random
 add = functions.Function("+", 2, lambda x: x[0]+x[1])
 subtract = functions.Function("-", 2, lambda x: x[0]-x[1])
 multiply = functions.Function("*", 2, lambda x: x[0]*x[1])
-divide = functions.Function("/", 2, lambda x: x[0]/x[1])
-functions = [add, subtract, multiply]#, divide]
+greater = functions.Function(">", 2, lambda x: x[0]>x[1])
+functions = [add, subtract, multiply]
 func_dict = {}
 for function in functions:
     func_dict[function.name] = function
@@ -30,7 +30,7 @@ def random_tree(depth, parent):
         return root
 
     else:
-        n = 1#random()*10
+        n = random()*10
         node = Node(str(n), parent, 0)
     
     
@@ -65,13 +65,8 @@ def crossover(tree1, tree2):
     c2.detach()
     p1.add(c2)
     p2.add(c1)
-    
             
-root1 = random_tree(3, None)
+root1 = random_tree(5, None)
 root2 = random_tree(3, None)
 print(root1.get_subtree())
-print(root2.get_subtree())
-crossover(root1, root2)
-
-print(root1.get_subtree())
-print(root2.get_subtree())
+print(evaluate_tree(root1))
