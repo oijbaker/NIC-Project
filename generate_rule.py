@@ -16,9 +16,6 @@ avg	 max   max   cp
  |    |     |     
  50   25    10   
 
-The above rule state if moving average over 50 days is greater than closing price buy or sell otherwise
-or if max price over 30 days is greater than closing price buy or sell otherwise. 
-
 """
 df = pd.read_csv("complete_data.csv").drop("Unnamed: 0",1)
 
