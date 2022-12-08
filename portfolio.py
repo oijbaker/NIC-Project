@@ -60,4 +60,4 @@ class Portfolio:
             
             value += stock[1]*close
             
-        return value
+        return value+self.cash

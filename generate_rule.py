@@ -29,7 +29,6 @@ def min_(stock, days, day):
     return df["min"+str(days)+"_"+str(stock+1)][day]
 
 df = pd.read_csv("complete_data.csv").drop("Unnamed: 0",1)
-print(moving_average(3, 50, 2))
 
 add = functions.Function("+", 2, lambda x: x[0]+x[1])
 subtract = functions.Function("-", 2, lambda x: x[0]-x[1])
@@ -49,14 +48,14 @@ def evaluate(f1, f2, operator, df):
 	bool_arr = []
 	for i in range(1, 11):
 		if operator == '>':
-			bool_arr.append(np.where(df[f1 + str('_') + str(i)] > df[f2 + str('_') + str(i)]))
+			bool_arr.append(np.where(df[f1 + str('_') + str(i)] > df[f2 + str('_') + str(i)], True, False))
 		else:
-			bool_arr.append(np.where(df[f1 + str('_') + str(i)] < df[f2 + str('_') + str(i)]))
+			bool_arr.append(np.where(df[f1 + str('_') + str(i)] < df[f2 + str('_') + str(i)], True, False))
 	return bool_arr
 
 
 def generate_random_rule():
-	function_array = ['avg', 'max', 'min']
+	function_array = ['avg5', 'avg10', 'avg15', 'avg25', 'avg50', 'max5', 'max10', 'max15', 'max25', 'max50', 'min5', 'min10', 'min15', 'min25', 'min50']
 	boolean_operators = ['and', 'or']
 	relational_operators = ['>', '<']
 
@@ -127,16 +126,15 @@ def evaluate_tree(tree):
     operator = tree.right.data
     right = evaluate(f1, f2, operator, df)
     
-    print(left)
-    
+    boolean = func_dict[tree.data]
+    return [[boolean.execute([left[i][j], right[i][j]]) for j in range(len(left[i]))] for i in range(len(left))]
     
     
 
 def main():
 	rule = generate_random_rule()
 	arr = inorderIterative(rule)
-	print(arr)
-	print(evaluate_tree(rule))
+	return rule
 
 if __name__ == '__main__':
 	main()
