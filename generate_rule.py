@@ -1,5 +1,5 @@
 from trees import Node
-import numpy
+import numpy as np
 import pandas as pd
 from collections import deque
 import random
@@ -20,7 +20,7 @@ or if max price over 30 days is less than closing price buy or sell otherwise.
 """
 
 def moving_average(stock, days, day):
-    return df["moving_average"+str(days)+"_"+str(stock+1)][day]
+    return df["avg"+str(days)+"_"+str(stock+1)][day]
 
 def max_(stock, days, day):
     return df["max"+str(days)+"_"+str(stock+1)][day]
@@ -53,6 +53,7 @@ def evaluate(f1, f2, operator, df):
 		else:
 			bool_arr.append(np.where(df[f1 + str('_') + str(i)] < df[f2 + str('_') + str(i)]))
 	return bool_arr
+
 
 def generate_random_rule():
 	function_array = ['avg', 'max', 'min']
@@ -116,14 +117,19 @@ def get_subtree(root):
 
 
 def evaluate_tree(tree):
-    tree_list = get_subtree(tree)
-    if tree_list[0] in func_dict:
-        f_name = tree_list[0]
-        f = func_dict[f_name]
-        r = f.execute([evaluate_tree(child) for child in [tree.left, tree.right]])
-        return r
-    else:
-        return float(tree_list[0])
+    f1 = tree.left.left.data
+    f2 = tree.left.right.data
+    operator = tree.left.data
+    left = evaluate(f1, f2, operator, df)
+    
+    f1 = tree.right.left.data
+    f2 = tree.right.right.data
+    operator = tree.right.data
+    right = evaluate(f1, f2, operator, df)
+    
+    print(left)
+    
+    
     
 
 def main():
