@@ -45,6 +45,14 @@ func_dict = {}
 for function in functions:
 	func_dict[function.name] = function
  
+def evaluate(f1, f2, operator, df):
+	bool_arr = []
+	for i in range(1, 11):
+		if operator == '>':
+			bool_arr.append(np.where(df[f1 + str('_') + str(i)] > df[f2 + str('_') + str(i)]))
+		else:
+			bool_arr.append(np.where(df[f1 + str('_') + str(i)] < df[f2 + str('_') + str(i)]))
+	return bool_arr
 
 def generate_random_rule():
 	function_array = ['avg', 'max', 'min']
