@@ -6,9 +6,14 @@ class Node:
 		self.data = data  
 
 
+	def replace(self, new):
+		new.left = self.left
+		new.right = self.right
+
+
 	def add(self, node, parent):
 		if parent == "r":
 			self.right = node
 		else:
 			self.left = node
-	
+  
