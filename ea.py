@@ -63,7 +63,7 @@ def mutate(s):
     node_to_swap.data = swap(node_to_swap.data)
             
     
-def generate(p=50):
+def generate(p=500):
     pop = []
     for i in range(p):
         pop.append(generate_rule.main())
@@ -82,10 +82,12 @@ def tournament_selection(pop, t=2):
     return winners[0], winners[1]
     
  
-population = generate(10) 
-fitnesses = []
-for k in range(20):
-    fitness = [f(s) for s in population]
+population = generate(50) 
+fitness, fitnesses = [f(s) for s in population], []
+
+for k in range(500):
+    
+    print("round", k)
     print(fitness)
     fitnesses.append(max(fitness))
     a, b = tournament_selection(population)
@@ -93,16 +95,11 @@ for k in range(20):
     # mutate(c)
     # mutate(d)
     for c in crossover(a, b):
-        worst_score = min(fitness)
-        mutate(c)
-        print(f(c))
+        now_fitness, worst_score = f(c), min(fitness)
         if f(c) > worst_score:
-            population.pop(fitness.index(worst_score))
-            population.append(c)
-            fitness.pop(fitness.index(worst_score))
-            fitness.append(f(c))
-    
-    
+            population[fitness.index(worst_score)] = c
+            fitness[fitness.index(worst_score)] = now_fitness
+
 
 plt.plot(fitnesses)
 plt.show()
