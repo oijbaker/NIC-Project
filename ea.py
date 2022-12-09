@@ -95,6 +95,7 @@ for k in range(500):
     # mutate(c)
     # mutate(d)
     for c in crossover(a, b):
+        mutate(c)
         now_fitness, worst_score = f(c), min(fitness)
         if f(c) > worst_score:
             population[fitness.index(worst_score)] = c
