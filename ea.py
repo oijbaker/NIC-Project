@@ -85,18 +85,15 @@ def tournament_selection(pop, t=2):
 t1 = generate_rule.generate_random_rule()
 
  
-population = generate(50) 
+population = generate(20) 
 fitness, fitnesses = [f(s) for s in population], []
 
-for k in range(500):
+for k in range(50):
     
     print("round", k)
     print(fitness)
-    fitnesses.append(max(fitness))
+    fitnesses.append(np.average(fitness))
     a, b = tournament_selection(population)
-    # cs = crossover(a,b)
-    # mutate(c)
-    # mutate(d)
     for c in crossover(a, b):
         worst_score = min(fitness)
         mutate(c)

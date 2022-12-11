@@ -117,7 +117,6 @@ def evaluate_tree(tree):
 
 def main():
 	rule = generate_random_rule()
-	return rule
 
 
 if __name__ == '__main__':
