@@ -97,7 +97,6 @@ def tournament_selection(pop, t=2):
     
 t1 = generate_rule.generate_random_rule()
 
-<<<<<<< HEAD
 
 def run_ea(p, n):
  
@@ -148,29 +147,3 @@ plt.show()
 # for f_ in fs:
 #     plt.plot(f_)
 # plt.show()
-
-=======
-pop = 20 # population size
-generation = 50 # genetic generation
-
-population = generate(pop) # set each tree object of population  
-fitness, fitnesses = [f(s) for s in population], []
-
-for k in range(generation):
-    
-    print("round", k)
-    print(fitness)
-    fitnesses.append(np.average(fitness))
-    a, b = tournament_selection(population)
-    for c in crossover(a, b):
-        worst_score = min(fitness)
-        mutate(c)
-        now_fitness, worst_score = f(c), min(fitness)
-        if f(c) > worst_score:
-            population[fitness.index(worst_score)] = c
-            fitness[fitness.index(worst_score)] = now_fitness
-
-
-plt.plot(fitnesses)
-plt.show()
->>>>>>> a2fef46381b38c4a07fd71897a4894ca946625e1
