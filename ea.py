@@ -72,7 +72,7 @@ def mutate(s):
     node_to_swap = random.choice(nodes)
     node_to_swap.data = swap(node_to_swap.data)
             
-    
+
 def generate(p=500):
     pop = []
     for i in range(p):
@@ -93,11 +93,13 @@ def tournament_selection(pop, t=2):
     
 t1 = generate_rule.generate_random_rule()
 
- 
-population = generate(10) # set each tree object of population  
+pop = 20 # population size
+generation = 50 # genetic generation
+
+population = generate(pop) # set each tree object of population  
 fitness, fitnesses = [f(s) for s in population], []
 
-for k in range(50):
+for k in range(generation):
     
     print("round", k)
     print(fitness)
