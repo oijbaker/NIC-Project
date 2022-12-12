@@ -5,6 +5,7 @@ import portfolio
 import random
 from trees import Node
 import matplotlib.pyplot as plt
+import random_rules as rr
 
 def f(s):
     bool_array = generate_rule.evaluate_tree(s)
@@ -27,8 +28,7 @@ df = pd.read_csv("Training_data.csv")
 df.columns = ["vol1", "close_1", "vol2", "close_2","vol3", "close_3","vol4", "close_4","vol5", "close_5","vol6", "close_6","vol7", "close_7","vol8", "close_8", "vol9", "close_9","vol10", "close_10"]
 
 def copy_tree(tree):
-    if tree is None:
-        return None
+    if tree is None: return None
 
     new_tree = Node(tree.data)
     new_tree.left = copy_tree(tree.left)
@@ -51,7 +51,7 @@ def crossover(c, d):
         a.right, b.right = b.right, a.right
     return [a, b]
 
-
+print(rr.function_array)
 def mutate(s):
     
     def swap(data):
@@ -64,8 +64,13 @@ def mutate(s):
         elif data == '<':
             return '>'
         else:
-            names = ['avg5', 'max5', 'min5','avg10', 'max10', 'min10','avg15', 'max15', 'min15', 'avg25', 'max25', 'min25', 'avg50', 'max50', 'min50', 'close']
-            names.remove(data)
+            # names = ['avg5', 'max5', 'min5','avg10', 'max10', 'min10','avg15', 'max15', 'min15', 'avg25', 'max25', 'min25', 'avg50', 'max50', 'min50', 'close']
+            names = rr.function_array
+            try:
+                names.remove(data)
+            except:
+                pass
+            print(names)
             return random.choice(names)
         
     nodes = [s, s.right, s.left, s.right.left, s.right.right, s.left.left, s.left.right]

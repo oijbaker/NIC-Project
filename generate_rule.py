@@ -4,6 +4,7 @@ import pandas as pd
 from collections import deque
 import random
 import functions
+import random_rules as rr
 
 """
 structure of a rule 
@@ -31,7 +32,9 @@ for function in functions:
 def generate_random_rule():
 	# function_array contains funtion that will be used to generate a rule 
 	# avg5 means the moving average over 5 days 
-	function_array = ['avg5', 'max5', 'min5','avg10', 'max10', 'min10','avg15', 'max15', 'min15', 'avg25', 'max25', 'min25', 'avg50', 'max50', 'min50', 'close']
+
+	# function_array = ['avg5', 'max5', 'min5','avg10', 'max10', 'min10','avg15', 'max15', 'min15', 'avg25', 'max25', 'min25', 'avg50', 'max50', 'min50', 'close']
+	function_array = rr.function_array
 	boolean_operators = ['and', 'or']
 	relational_operators = ['>', '<'] # for comparisons
 
