@@ -3,13 +3,12 @@ import pandas as pd
 import generate_rule
 import portfolio
 import random
-import trees
+from trees import Node
 import matplotlib.pyplot as plt
 
 def f(s):
     bool_array = generate_rule.evaluate_tree(s)
     p = portfolio.Portfolio(df)
-    
     
     for k in range(0,10):
         if bool_array[k][0]:
@@ -24,13 +23,23 @@ def f(s):
     return p.evaluate()
 
 
-
-    
 df = pd.read_csv("Training_data.csv")
 df.columns = ["vol1", "close_1", "vol2", "close_2","vol3", "close_3","vol4", "close_4","vol5", "close_5","vol6", "close_6","vol7", "close_7","vol8", "close_8", "vol9", "close_9","vol10", "close_10"]
 
+def copy_tree(tree):
+    if tree is None:
+        return None
 
-def crossover(a,b):
+    new_tree = Node(tree.data)
+    new_tree.left = copy_tree(tree.left)
+    new_tree.right = copy_tree(tree.right)
+    return new_tree
+
+
+def crossover(c, d):
+    a = copy_tree(c)
+    b = copy_tree(d)
+
     r = random.choice([0,1,2,3])
     if r == 0:
         a.left, b.left = b.left, a.right
@@ -85,7 +94,7 @@ def tournament_selection(pop, t=2):
 t1 = generate_rule.generate_random_rule()
 
  
-population = generate(20) 
+population = generate(10) # set each tree object of population  
 fitness, fitnesses = [f(s) for s in population], []
 
 for k in range(50):
