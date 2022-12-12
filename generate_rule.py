@@ -65,20 +65,6 @@ def generate_random_rule():
 	return root 
 	
 
-def inorderIterative(root):
-	stack = deque()
-	curr = root
-	rule_arr = []
-	while stack or curr:
-		if curr:
-			stack.append(curr)
-			curr = curr.left
-		else:
-			curr = stack.pop()
-			rule_arr.append(curr.data)
-			curr = curr.right
-	return rule_arr
-
 def get_subtree(root):
 	
 	sub_tree = [root.data]
