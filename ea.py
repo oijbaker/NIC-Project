@@ -12,6 +12,7 @@ def f(s):
     
     
     for k in range(0,10):
+        p.day = 0
         if bool_array[k][0]:
             p.buy(k+1, 5)
         for j in range(1,len(bool_array[k])):
@@ -20,7 +21,8 @@ def f(s):
                     p.buy(k+1, 5)
                 else:
                     p.sell(k+1, 5)
-            
+            p.day += 1
+                    
     return p.evaluate()
 
 
@@ -43,7 +45,7 @@ def crossover(a,b):
     return [a, b]
 
 
-def mutate(s):
+def mutate(s, m=1):
     
     def swap(data):
         if data == 'and':
@@ -59,9 +61,11 @@ def mutate(s):
             names.remove(data)
             return random.choice(names)
         
-    nodes = [s, s.right, s.left, s.right.left, s.right.right, s.left.left, s.left.right]
-    node_to_swap = random.choice(nodes)
-    node_to_swap.data = swap(node_to_swap.data)
+        
+    for i in range(m):
+        nodes = [s, s.right, s.left, s.right.left, s.right.right, s.left.left, s.left.right]
+        node_to_swap = random.choice(nodes)
+        node_to_swap.data = swap(node_to_swap.data)
             
     
 def generate(p=500):
@@ -84,24 +88,54 @@ def tournament_selection(pop, t=2):
     
 t1 = generate_rule.generate_random_rule()
 
+
+def run_ea(p, n):
  
-population = generate(20) 
-fitness, fitnesses = [f(s) for s in population], []
+    population = generate(p) 
+    fitness, fitnesses = [f(s) for s in population], []
 
-for k in range(50):
-    
-    print("round", k)
-    print(fitness)
-    fitnesses.append(np.average(fitness))
-    a, b = tournament_selection(population)
-    for c in crossover(a, b):
-        worst_score = min(fitness)
-        mutate(c)
-        now_fitness, worst_score = f(c), min(fitness)
-        if f(c) > worst_score:
-            population[fitness.index(worst_score)] = c
-            fitness[fitness.index(worst_score)] = now_fitness
+    for k in range(n):
+        
+        # print("round", k)
+        # print(fitness)
+        fitnesses.append(np.average(fitness))
+        a, b = tournament_selection(population)
+        for c in crossover(a, b):
+            worst_score = min(fitness)
+            mutate(c)
+            now_fitness, worst_score = f(c), min(fitness)
+            if f(c) > worst_score:
+                print(set(fitness) == set([f(s) for s in population]))
+                population[fitness.index(worst_score)] = c
+                fitness[fitness.index(worst_score)] = now_fitness
+
+    return fitnesses, population, fitness
 
 
-plt.plot(fitnesses)
+def buy_and_hold():
+    p = portfolio.Portfolio(df)
+    for k in range(10):
+        p.buy(k+1, 5)
+        
+    p.day += len(df)-1
+    return p.evaluate()
+
+v = buy_and_hold()   
+fit, pop, fit_pop = run_ea(20,50)
+print([generate_rule.get_subtree(p) for p in pop])
+print([f(p) for p in pop])
+print(fit_pop)
+plt.plot(fit)
+plt.plot([v for i in range(50)])
 plt.show()
+
+# fs = []
+# for i in range(1,5):
+#     f_ = run_ea(20, i)
+#     fs.append(f_+[None for i in range(5-i)])
+
+# print(fs)
+# for f_ in fs:
+#     plt.plot(f_)
+# plt.show()
+
