@@ -58,7 +58,7 @@ class Portfolio:
         
         if number < 0.4*volume and number*close_ < self.cash*0.999:
             self.stocks[stock_index-1][1] += number 
-         self.cash -= number*close_*1.001
+            self.cash -= number*close_*1.001
             
         if self.do_log:
             total_value = self.evaluate()+self.cash
