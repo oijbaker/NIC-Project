@@ -1,9 +1,12 @@
+import random
+
 class Node:
 
 	def __init__(self, data):
 		self.left = None
 		self.right = None 
 		self.data = data  
+		self.number = random.randint(1,100)
 
 
 	def replace(self, new):

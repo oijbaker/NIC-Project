@@ -13,7 +13,7 @@ def f(s):
     
     for k in range(0,10):
         if bool_array[k][0]:
-            p.buy(k+1, 1)
+            p.buy(k+1, 5)
         for j in range(1,len(bool_array[k])):
             if bool_array[k][j] != bool_array[k][j-1]:
                 if bool_array[k][j]:
@@ -22,6 +22,7 @@ def f(s):
                     p.sell(k+1, 5)
             
     return p.evaluate()
+
 
 
     
@@ -66,7 +67,7 @@ def mutate(s):
 def generate(p=500):
     pop = []
     for i in range(p):
-        pop.append(generate_rule.main())
+        pop.append(generate_rule.generate_random_rule())
     return pop
 
 
@@ -81,20 +82,20 @@ def tournament_selection(pop, t=2):
             winners.append(t2)
     return winners[0], winners[1]
     
+t1 = generate_rule.generate_random_rule()
+
  
-population = generate(50) 
+population = generate(20) 
 fitness, fitnesses = [f(s) for s in population], []
 
-for k in range(500):
+for k in range(50):
     
     print("round", k)
     print(fitness)
-    fitnesses.append(max(fitness))
+    fitnesses.append(np.average(fitness))
     a, b = tournament_selection(population)
-    # cs = crossover(a,b)
-    # mutate(c)
-    # mutate(d)
     for c in crossover(a, b):
+        worst_score = min(fitness)
         mutate(c)
         now_fitness, worst_score = f(c), min(fitness)
         if f(c) > worst_score:
