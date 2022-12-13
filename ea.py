@@ -71,11 +71,13 @@ def mutate(s, m=1):
             names.remove(data)
             return random.choice(names)
         
-        
+    mutation_probability = 0.7
     for i in range(m):
-        nodes = [s, s.right, s.left, s.right.left, s.right.right, s.left.left, s.left.right]
-        node_to_swap = random.choice(nodes)
-        node_to_swap.data = swap(node_to_swap.data)
+        mutation_rate = np.random.rand()
+        if mutation_rate < mutation_probability:
+            nodes = [s, s.right, s.left, s.right.left, s.right.right, s.left.left, s.left.right]
+            node_to_swap = random.choice(nodes)
+            node_to_swap.data = swap(node_to_swap.data)
             
 
 def generate(p=500):
