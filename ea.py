@@ -136,6 +136,8 @@ print([f(p) for p in pop])
 print(fit_pop)
 plt.plot(fit)
 plt.plot([v for i in range(50)])
+plt.xlabel("genetic generations")
+plt.ylabel("fitness")
 plt.show()
 
 # fs = []
