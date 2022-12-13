@@ -132,8 +132,6 @@ def tournament_selection(pop, t = 2):
     
     # Return tuple of winners
     return winners[0], winners[1]
-    
-# t1 = generate_rule.generate_random_rule()
 
 
 # The generation loop function, p is population list, n is genetic generations
