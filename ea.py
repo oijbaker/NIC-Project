@@ -114,8 +114,6 @@ def tournament_selection(pop, t = 2):
     # Calculate fitness and decide winner with quick sort reverse
     pop_selected.sort(key = lambda i: f(i), reverse = True)
 
-    print(f(pop_selected[0]), f(pop_selected[1]))
-
     # Return winners 1st and 2nd
     return pop_selected[0], pop_selected[1]
 
