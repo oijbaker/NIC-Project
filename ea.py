@@ -8,19 +8,20 @@ import matplotlib.pyplot as plt
 
 def f(s):
     bool_array = generate_rule.evaluate_tree(s)
-    p = portfolio.Portfolio(df)
-    
+    p = portfolio.Portfolio(df, do_log=True)
+            
     for k in range(0,10):
-        p.day = 0
         if bool_array[k][0]:
             p.buy(k+1, 5)
-        for j in range(1,len(bool_array[k])):
+    for j in range(1, len(bool_array)):
+        for k in range(0,10):
             if bool_array[k][j] != bool_array[k][j-1]:
                 if bool_array[k][j]:
                     p.buy(k+1, 5)
                 else:
                     p.sell(k+1, 5)
-            p.day += 1
+                p.day += 1
+            
                     
     return p.evaluate()
 
@@ -54,7 +55,7 @@ def crossover(c, d):
     return [a, b]
 
 
-def mutate(s, m=1):
+def mutate(s, m=10):
     
     def swap(data):
         if data == 'and':
@@ -97,7 +98,6 @@ def tournament_selection(pop, t=2):
     
 t1 = generate_rule.generate_random_rule()
 
-<<<<<<< HEAD
 
 def run_ea(p, n):
  
@@ -106,8 +106,8 @@ def run_ea(p, n):
 
     for k in range(n):
         
-        # print("round", k)
-        # print(fitness)
+        print("round", k)
+        print(fitness)
         fitnesses.append(np.average(fitness))
         a, b = tournament_selection(population)
         for c in crossover(a, b):
@@ -115,7 +115,6 @@ def run_ea(p, n):
             mutate(c)
             now_fitness, worst_score = f(c), min(fitness)
             if f(c) > worst_score:
-                print(set(fitness) == set([f(s) for s in population]))
                 population[fitness.index(worst_score)] = c
                 fitness[fitness.index(worst_score)] = now_fitness
 
@@ -131,7 +130,7 @@ def buy_and_hold():
     return p.evaluate()
 
 v = buy_and_hold()   
-fit, pop, fit_pop = run_ea(20,50)
+fit, pop, fit_pop = run_ea(500,50)
 print([generate_rule.get_subtree(p) for p in pop])
 print([f(p) for p in pop])
 print(fit_pop)
@@ -149,28 +148,3 @@ plt.show()
 #     plt.plot(f_)
 # plt.show()
 
-=======
-pop = 20 # population size
-generation = 50 # genetic generation
-
-population = generate(pop) # set each tree object of population  
-fitness, fitnesses = [f(s) for s in population], []
-
-for k in range(generation):
-    
-    print("round", k)
-    print(fitness)
-    fitnesses.append(np.average(fitness))
-    a, b = tournament_selection(population)
-    for c in crossover(a, b):
-        worst_score = min(fitness)
-        mutate(c)
-        now_fitness, worst_score = f(c), min(fitness)
-        if f(c) > worst_score:
-            population[fitness.index(worst_score)] = c
-            fitness[fitness.index(worst_score)] = now_fitness
-
-
-plt.plot(fitnesses)
-plt.show()
->>>>>>> a2fef46381b38c4a07fd71897a4894ca946625e1

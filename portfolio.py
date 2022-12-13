@@ -8,6 +8,7 @@ class Portfolio:
         self.day = 0
         self.logbook = []
         self.do_log = do_log
+        self.value_list = []
         
     
     def log(self, string):
@@ -58,11 +59,12 @@ class Portfolio:
         
         if number < 0.4*volume and number*close_ < self.cash*0.999:
             self.stocks[stock_index-1][1] += number 
-         self.cash -= number*close_*1.001
+            self.cash -= number*close_*1.001
             
         if self.do_log:
             total_value = self.evaluate()+self.cash
             self.log("Bought "+str(number)+" of "+str(stock_index)+" at "+str(close_)+". New value="+str(total_value))
+            self.value_list.append(total_value)
      
             
     def sell(self, stock_index, number):
@@ -79,6 +81,7 @@ class Portfolio:
         if self.do_log:
             total_value = self.evaluate()+self.cash
             self.log("Sold "+str(number)+" of "+str(stock_index)+" at "+str(close_)+". New value="+str(total_value))
+            self.value_list.append(total_value)
         
         
     def evaluate(self):
