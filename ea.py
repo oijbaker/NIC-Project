@@ -8,19 +8,20 @@ import matplotlib.pyplot as plt
 
 def f(s):
     bool_array = generate_rule.evaluate_tree(s)
-    p = portfolio.Portfolio(df)
-    
+    p = portfolio.Portfolio(df, do_log=True)
+            
     for k in range(0,10):
-        p.day = 0
         if bool_array[k][0]:
             p.buy(k+1, 5)
-        for j in range(1,len(bool_array[k])):
+    for j in range(1, len(bool_array)):
+        for k in range(0,10):
             if bool_array[k][j] != bool_array[k][j-1]:
                 if bool_array[k][j]:
                     p.buy(k+1, 5)
                 else:
                     p.sell(k+1, 5)
-            p.day += 1
+                p.day += 1
+            
                     
     return p.evaluate()
 
