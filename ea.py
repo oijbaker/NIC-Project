@@ -161,17 +161,11 @@ def run_ea(p, n):
 
 
 def buy_and_hold():
-    # Create a Portfolio object using df dataframe
     p = portfolio.Portfolio(df)
-    
-    # Buy 5 units of the stock with index k+1 for each value of k from 0 to 9
     for k in range(10):
-        p.buy(k + 1, 5)
-        
-    # Increment the day attribute by the number of rows in df minus 1
-    p.day += len(df) - 1
-    
-    # Return the result
+        p.buy_percentage_of_portfolio(k+1,10)
+      
+    p.day += len(df)-1
     return p.evaluate()
 
 
