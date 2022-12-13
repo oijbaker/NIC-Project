@@ -9,19 +9,18 @@ import matplotlib.pyplot as plt
 def f(s):
     bool_array = generate_rule.evaluate_tree(s)
     p = portfolio.Portfolio(df, do_log=True)
-            
-    for k in range(0,10):
-        if bool_array[k][0]:
-            p.buy(k+1, 5)
-    for j in range(1, len(bool_array)):
-        for k in range(0,10):
-            if bool_array[k][j] != bool_array[k][j-1]:
-                if bool_array[k][j]:
+    
+    bool_df = pd.DataFrame(bool_array)
+    for j in range(1, len(bool_array[0])):
+        for k in range(1,10):
+            if bool_df[j][k] != bool_df[j-1][k]:
+                if bool_df[j][k]:
                     p.buy(k+1, 5)
                 else:
-                    p.sell(k+1, 5)
-                p.day += 1
-            
+                    p.sell(k+1, 5)    
+        
+    if p.evaluate() == 10000:
+        return 5000            
                     
     return p.evaluate()
 
@@ -108,16 +107,15 @@ def run_ea(p, n):
 
     for k in range(n):
         
-        # print("round", k)
+        print("round", k)
         # print(fitness)
         fitnesses.append(np.average(fitness))
         a, b = tournament_selection(population)
         for c in crossover(a, b):
             worst_score = min(fitness)
-            mutate(c)
+            #mutate(c)
             now_fitness, worst_score = f(c), min(fitness)
             if f(c) > worst_score:
-                print(set(fitness) == set([f(s) for s in population]))
                 population[fitness.index(worst_score)] = c
                 fitness[fitness.index(worst_score)] = now_fitness
 
@@ -127,8 +125,8 @@ def run_ea(p, n):
 def buy_and_hold():
     p = portfolio.Portfolio(df)
     for k in range(10):
-        p.buy(k+1, 5)
-        
+        p.buy_percentage_of_portfolio(k+1,10)
+      
     p.day += len(df)-1
     return p.evaluate()
 
