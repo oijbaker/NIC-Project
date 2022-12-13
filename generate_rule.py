@@ -17,7 +17,7 @@ avg	 max   max   cp
  50   25    10   
 
 """
-df = pd.read_csv("complete_data.csv").drop("Unnamed: 0",1)
+df = pd.read_csv("complete_data.csv").drop("Unnamed: 0", 1)
 
 or_ = functions.Function("or", 2, lambda x: (x[0] or x[1]))
 and_ = functions.Function("and", 2, lambda x: x[0] and x[1])
@@ -66,6 +66,8 @@ def generate_random_rule():
 	
 
 def get_subtree(root):
+	# Root is the root node of a binary tree
+	# The function returns a list representing the sub-tree rooted at the given root node
 	
 	sub_tree = [root.data]
  
@@ -75,28 +77,42 @@ def get_subtree(root):
 		
 	return sub_tree
 
+
 def evaluate(f1, f2, operator, df):
+	# F1 and f2 are two columns in the dataframe 'df'
+	# Operator is either '>' or '<'
+	# The function compares the values in the two columns in the dataframe 'df'
+	# Returns a list of boolean values
 	bool_arr = []
 	for i in range(1, 11):
 		if operator == '>':
+			# Check if the value in column left column is greater than the value in right column
 			bool_arr.append(np.where(df[f1 + str('_') + str(i)] > df[f2 + str('_') + str(i)], True, False))
 		else:
+			# Check if the value in left column is less than the value in right column
 			bool_arr.append(np.where(df[f1 + str('_') + str(i)] < df[f2 + str('_') + str(i)], True, False))
 	return bool_arr
 
 
 def evaluate_tree(tree):
-	# evaluate left sub-tree 
+	# A binary tree, and root node represents a logical operator
+	# The function evaluates the expressions in the left and right subtrees
+
+	# Evaluate left sub-tree 
     f1 = tree.left.left.data
     f2 = tree.left.right.data
     operator = tree.left.data
+	# Get the result of evaluating the expression in the left sub-tree
     left = evaluate(f1, f2, operator, df)
-    # evaluate right sub-tree 
+
+    # Evaluate right sub-tree 
     f1 = tree.right.left.data
     f2 = tree.right.right.data
     operator = tree.right.data
+	# Get the result of evaluating the expression in the right sub-tree
     right = evaluate(f1, f2, operator, df)
     
+	# Return a nested list comprehension of method to pairs of elements from two lists for ea.fitness() 
     boolean = func_dict[tree.data]
     return [[boolean.execute([left[i][j], right[i][j]]) for j in range(len(left[i]))] for i in range(len(left))]
 
