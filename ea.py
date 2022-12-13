@@ -116,7 +116,7 @@ def tournament_selection(pop, t = 2):
 
     print(f(pop_selected[0]), f(pop_selected[1]))
 
-    # Return tuple of winners 1st and 2nd
+    # Return winners 1st and 2nd
     return pop_selected[0], pop_selected[1]
 
 
@@ -181,5 +181,5 @@ v = buy_and_hold()
 plt.plot([v for i in range(generation_times)])
 
 plt.xlabel("genetic generations")
-plt.ylabel("fitness")
+plt.ylabel("average fitness")
 plt.show()
