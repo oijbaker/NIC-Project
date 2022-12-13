@@ -131,7 +131,8 @@ def buy_and_hold():
     return p.evaluate()
 
 v = buy_and_hold()   
-fit, pop, fit_pop = run_ea(20,50)
+print(v)
+fit, pop, fit_pop = run_ea(50,50)
 print([generate_rule.get_subtree(p) for p in pop])
 print([f(p) for p in pop])
 print(fit_pop)
