@@ -10,26 +10,20 @@ import matplotlib.pyplot as plt
 def f(s):
     # Generate a boolean array by evaluating the given tree with the given string
     bool_array = generate_rule.evaluate_tree(s)
-    # Initialize a portfolio object with the given dataframe, do_log can open debug_mode
-    p = portfolio.Portfolio(df, do_log = True)
-            
-    for k in range(0, 10):
-        # Reset the day count to 0
-        if bool_array[k][0]:
-            # Buy 5 shares of the stock represented by the current row
-            p.buy(k + 1, 5)
-    for j in range(1, len(bool_array)):
-        for k in range(0, 10):
-            if bool_array[k][j] != bool_array[k][j - 1]:
-                if bool_array[k][j]:
-                    # If True, buy 5 shares of the stock
-                    p.buy(k + 1, 5)
+    p = portfolio.Portfolio(df, do_log=True)
+    
+    bool_df = pd.DataFrame(bool_array)
+    for j in range(1, len(bool_array[0])):
+        for k in range(1,10):
+            if bool_df[j][k] != bool_df[j-1][k]:
+                if bool_df[j][k]:
+                    p.buy(k+1, 5)
                 else:
-                    # If False, sell 5 shares of the stock
-                    p.sell(k + 1, 5)
-                p.day += 1
-            
-    # Return the final evaluation of the portfolio
+                    p.sell(k+1, 5)    
+        
+    if p.evaluate() == 10000:
+        return 5000            
+                   
     return p.evaluate()
 
 
@@ -144,7 +138,7 @@ def run_ea(p, n):
     # Start evolving
     for k in range(n):
         
-        # print("round", k)
+        print("round", k)
         # print(fitness)
         # set this round fitness
         fitnesses.append(np.average(fitness))
@@ -157,7 +151,6 @@ def run_ea(p, n):
             now_fitness, worst_score = f(c), min(fitness)
             # Compare new fitness with the weakness data
             if f(c) > worst_score:
-                print(set(fitness) == set([f(s) for s in population]))
                 # Weakest replacement 
                 # Python's garbage collector automatically reclaims the memory space allocated for the tree.
                 population[fitness.index(worst_score)] = c
