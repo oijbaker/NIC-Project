@@ -66,8 +66,8 @@ def crossover(c, d):
     return [a, b]
 
 
-# Mutation function, default 100% mutation
-def mutate(s, m = 1):
+# Mutation function, default 70% mutation, m is times to mutate
+def mutate(s, m = 1, mutation_probability = 0.7):
     
     def swap(data):
         if data == 'and': return 'or'
@@ -82,8 +82,7 @@ def mutate(s, m = 1):
             names.remove(data)
             # Return random rule
             return random.choice(names)
-        
-    mutation_probability = 0.7
+
     # Cirlcal loop m times to perform m swaps on the input string s  
     for i in range(m):
         mutation_rate = np.random.rand()
@@ -112,7 +111,7 @@ def tournament_selection(pop, t = 2):
     # Random choose two different number
     pop_selected = random.sample(pop, t)
 
-    # Calculate fitness and decide winner iwth quick sort reverse
+    # Calculate fitness and decide winner with quick sort reverse
     pop_selected.sort(key = lambda i: f(i), reverse = True)
 
     print(f(pop_selected[0]), f(pop_selected[1]))
@@ -174,6 +173,7 @@ fit, pop, fit_pop = run_ea(population_size, generation_times)
 print([generate_rule.get_subtree(p) for p in pop])
 print(fit_pop)
 
+# Draw average fitness
 plt.plot(fit)
 
 # Computational theory buy and hold strategy
