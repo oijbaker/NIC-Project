@@ -4,6 +4,8 @@ import pandas as pd
 from collections import deque
 import random
 import functions
+import os
+import sys
 
 """
 structure of a rule 
@@ -17,7 +19,20 @@ avg	 max   max   cp
  50   25    10   
 
 """
-df = pd.read_csv("complete_data.csv").drop("Unnamed: 0", 1)
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+try:
+	df = pd.read_csv("complete_data.csv").drop("Unnamed: 0", 1)
+except:
+	df = pd.read_csv(resource_path("complete_data.csv")).drop("Unnamed: 0", 1)
 
 or_ = functions.Function("or", 2, lambda x: (x[0] or x[1]))
 and_ = functions.Function("and", 2, lambda x: x[0] and x[1])
@@ -25,7 +40,6 @@ functions = [ or_, and_]
 func_dict = {}
 for function in functions:
 	func_dict[function.name] = function
-
 
 
 def generate_random_rule():

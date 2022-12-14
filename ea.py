@@ -27,7 +27,11 @@ def f(s):
     return p.evaluate()
 
 
-df = pd.read_csv("Training_data.csv")
+try:
+    df = pd.read_csv("Training_data.csv")
+except:
+    df = pd.read_csv(generate_rule.resource_path("Training_data.csv"))
+
 df.columns = ["vol1", "close_1", "vol2", "close_2","vol3", "close_3","vol4", "close_4","vol5", "close_5","vol6", "close_6","vol7", "close_7","vol8", "close_8", "vol9", "close_9","vol10", "close_10"]
 
 
