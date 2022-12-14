@@ -10,16 +10,16 @@ import matplotlib.pyplot as plt
 def f(s):
     # Generate a boolean array by evaluating the given tree with the given string
     bool_array = generate_rule.evaluate_tree(s)
-    p = portfolio.Portfolio(df, do_log=True)
+    p = portfolio.Portfolio(df, do_log = True)
     
     bool_df = pd.DataFrame(bool_array)
     for j in range(1, len(bool_array[0])):
         for k in range(1,10):
-            if bool_df[j][k] != bool_df[j-1][k]:
+            if bool_df[j][k] != bool_df[j - 1][k]:
                 if bool_df[j][k]:
-                    p.buy(k+1, 5)
+                    p.buy(k + 1, 5)
                 else:
-                    p.sell(k+1, 5)    
+                    p.sell(k + 1, 5)    
         
     if p.evaluate() == 10000:
         return 5000            
@@ -66,8 +66,8 @@ def crossover(c, d):
     return [a, b]
 
 
-# Mutation function, default 100% mutation
-def mutate(s, m = 1):
+# Mutation function, default 70% mutation, m is times to mutate
+def mutate(s, m = 1, mutation_probability = 0.7):
     
     def swap(data):
         if data == 'and': return 'or'
@@ -82,8 +82,7 @@ def mutate(s, m = 1):
             names.remove(data)
             # Return random rule
             return random.choice(names)
-        
-    mutation_probability = 0.7
+
     # Cirlcal loop m times to perform m swaps on the input string s  
     for i in range(m):
         mutation_rate = np.random.rand()
@@ -109,23 +108,14 @@ def generate(p = 500):
 # Tournament selection function, default size = 2
 def tournament_selection(pop, t = 2):
 
-    winners = []
-
     # Random choose two different number
-    for i in range(t):
-        while (True):
-            t1 = random.randint(0, len(pop) - 1)
-            t2 = random.randint(0, len(pop) - 1) 
-            if t1 != t2: break
+    pop_selected = random.sample(pop, t)
 
-        # Calculate fitness and decide winner
-        if f(pop[t1]) > f(pop[t2]):
-            winners.append(pop[t1])
-        else:
-            winners.append(pop[t2])
-    
-    # Return tuple of winners
-    return winners[0], winners[1]
+    # Calculate fitness and decide winner with quick sort reverse
+    pop_selected.sort(key = lambda i: f(i), reverse = True)
+
+    # Return winners 1st and 2nd
+    return pop_selected[0], pop_selected[1]
 
 
 # The generation loop function, p is population list, n is genetic generations
@@ -160,12 +150,14 @@ def run_ea(p, n):
     return fitnesses, population, fitness
 
 
+# invest like 10% of  starting profit into each stock, and then sell at the end
 def buy_and_hold():
     p = portfolio.Portfolio(df)
+    # Buy and hold strategy
     for k in range(10):
-        p.buy_percentage_of_portfolio(k+1,10)
+        p.buy_percentage_of_portfolio(k + 1, 10)
       
-    p.day += len(df)-1
+    p.day += len(df) - 1
     return p.evaluate()
 
 
@@ -177,25 +169,15 @@ generation_times = 50
 fit, pop, fit_pop = run_ea(population_size, generation_times)
 
 print([generate_rule.get_subtree(p) for p in pop])
-print([f(p) for p in pop])
 print(fit_pop)
 
+# Draw average fitness
 plt.plot(fit)
 
-# Computational theory fitness
+# Computational theory buy and hold strategy
 v = buy_and_hold()   
 plt.plot([v for i in range(generation_times)])
 
 plt.xlabel("genetic generations")
-plt.ylabel("fitness")
+plt.ylabel("average fitness")
 plt.show()
-
-# fs = []
-# for i in range(1,5):
-#     f_ = run_ea(20, i)
-#     fs.append(f_+[None for i in range(5-i)])
-
-# print(fs)
-# for f_ in fs:
-#     plt.plot(f_)
-# plt.show()
