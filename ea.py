@@ -5,6 +5,7 @@ import portfolio
 import random
 from trees import Node
 import matplotlib.pyplot as plt
+from math import log
 
 def f(s):
     bool_array = generate_rule.evaluate_tree(s)
@@ -18,9 +19,9 @@ def f(s):
                     p.buy(k+1, 5)
                 else:
                     p.sell(k+1, 5)    
-        
+    
     if p.evaluate() == 10000:
-        return 5000            
+       return 0       
                     
     return p.evaluate()
 
@@ -61,28 +62,37 @@ def mutate(s, m=1):
             return 'or'
         elif data == 'or':
             return 'and'
-        elif data == '>':
-            return '<'
-        elif data == '<':
-            return '>'
-        else:
+        elif data in ['>', '<', 'increase']:
+            names = ['>', '<', 'increase']
+            names.remove(data)
+            return random.choice(data)
+        elif data in ['avg5', 'max5', 'min5','avg10', 'max10', 'min10','avg15', 'max15', 'min15', 'avg25', 'max25', 'min25', 'avg50', 'max50', 'min50', 'close']:
             names = ['avg5', 'max5', 'min5','avg10', 'max10', 'min10','avg15', 'max15', 'min15', 'avg25', 'max25', 'min25', 'avg50', 'max50', 'min50', 'close']
             names.remove(data)
             return random.choice(names)
         
-    mutation_probability = 0.7
-    for i in range(m):
-        mutation_rate = np.random.rand()
-        if mutation_rate < mutation_probability:
-            nodes = [s, s.right, s.left, s.right.left, s.right.right, s.left.left, s.left.right]
-            node_to_swap = random.choice(nodes)
-            node_to_swap.data = swap(node_to_swap.data)
-            
+    if m == 0:
+        
+        mutation_probability = 0.7
+        for i in range(m):
+            mutation_rate = np.random.rand()
+            if mutation_rate < mutation_probability:
+                nodes = [s, s.right, s.left, s.right.left, s.right.right, s.left.left, s.left.right]
+                node_to_swap = random.choice(nodes)
+                node_to_swap.data = swap(node_to_swap.data)
+                
+    else:
+        
+        nodes = [s, s.right, s.left, s.right.left, s.right.right, s.left.left, s.left.right]
+        node_to_swap = random.choice(nodes)
+        node_to_swap.data = swap(node_to_swap.data)  
+        
 
 def generate(p=500):
     pop = []
     for i in range(p):
         pop.append(generate_rule.generate_random_rule())
+    print([generate_rule.get_subtree(p) for p in pop])
     return pop
 
 
@@ -97,10 +107,24 @@ def tournament_selection(pop, t=2):
             winners.append(t2)
     return winners[0], winners[1]
     
-t1 = generate_rule.generate_random_rule()
+
+def rank_selection(pop, fit_pop, s=1):
+    if s == 1:
+        return random.choice(pop), random.choice(pop)
+    
+    else:
+        ret = []
+        n = len(pop)
+        r = 2*np.pi*(s-1)/(s**n-1)
+        for i in range(2):
+            p = np.random.random()*2*np.pi
+            selected = np.floor(log(1+p*(s-1)/r, s))
+            sort_pop = sorted(fit_pop)
+            ret.append(pop[fit_pop.index(sort_pop[int(n-1-selected)])])
+        return ret[0], ret[1]
 
 
-def run_ea(p, n):
+def run_ea(p, n, s):
  
     population = generate(p) 
     fitness, fitnesses = [f(s) for s in population], []
@@ -110,10 +134,10 @@ def run_ea(p, n):
         print("round", k)
         # print(fitness)
         fitnesses.append(np.average(fitness))
-        a, b = tournament_selection(population)
+        a, b = rank_selection(population, fitness, s)
         for c in crossover(a, b):
             worst_score = min(fitness)
-            #mutate(c)
+            mutate(c)
             now_fitness, worst_score = f(c), min(fitness)
             if f(c) > worst_score:
                 population[fitness.index(worst_score)] = c
@@ -131,13 +155,12 @@ def buy_and_hold():
     return p.evaluate()
 
 v = buy_and_hold()   
-print(v)
-fit, pop, fit_pop = run_ea(50,50)
-print([generate_rule.get_subtree(p) for p in pop])
-print([f(p) for p in pop])
-print(fit_pop)
-plt.plot(fit)
-plt.plot([v for i in range(50)])
+
+for s in [1.1, 1.25, 1.5, 1.75, 2]:
+    fit, pop, fit_pop = run_ea(20,30,s)
+    plt.plot(fit)
+    plt.plot([v for i in range(30)])
+plt.legend([1.1, 1.25, 1.5, 1.75, 2])
 plt.xlabel("genetic generations")
 plt.ylabel("fitness")
 plt.show()

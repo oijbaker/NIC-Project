@@ -1,6 +1,7 @@
 import functions
 from node import Node
 from random import choice, random
+import generate_rule
 
 add = functions.Function("+", 2, lambda x: x[0]+x[1])
 subtract = functions.Function("-", 2, lambda x: x[0]-x[1])

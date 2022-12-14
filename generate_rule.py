@@ -33,7 +33,7 @@ def generate_random_rule():
 	# avg5 means the moving average over 5 days 
 	function_array = ['avg5', 'max5', 'min5','avg10', 'max10', 'min10','avg15', 'max15', 'min15', 'avg25', 'max25', 'min25', 'avg50', 'max50', 'min50', 'close']
 	boolean_operators = ['and', 'or']
-	relational_operators = ['>', '<'] # for comparisons
+	relational_operators = ['>', '<', 'increase'] # for comparisons
 
 	function_idx = []
 	boolean_idx = random.randint(0, len(boolean_operators) -1)
@@ -78,8 +78,13 @@ def get_subtree(root):
 def evaluate(f1, f2, operator, df):
 	bool_arr = []
 	for i in range(1, 11):
-		if operator == '>':
+		if operator == "increase":
+			
+			bool_arr.append(np.array([True]+[df['close_' + str(i)][k]>df['close_' + str(i)][k-1] for k in range(1,len(df))]))
+			#print(len([True]+np.array([df['close_' + str(i)][k]>df['close_' + str(i)][k-1] for k in range(1,len(df))]+[True])))
+		elif operator == '>':
 			bool_arr.append(np.where(df[f1 + str('_') + str(i)] > df[f2 + str('_') + str(i)], True, False))
+			#print(len(np.where(df[f1 + str('_') + str(i)] > df[f2 + str('_') + str(i)], True, False)))
 		else:
 			bool_arr.append(np.where(df[f1 + str('_') + str(i)] < df[f2 + str('_') + str(i)], True, False))
 	return bool_arr
@@ -98,6 +103,8 @@ def evaluate_tree(tree):
     right = evaluate(f1, f2, operator, df)
     
     boolean = func_dict[tree.data]
+    #print(left[0])
+    #print([len(left[i]) for i in range(len(left))])
     return [[boolean.execute([left[i][j], right[i][j]]) for j in range(len(left[i]))] for i in range(len(left))]
 
 
